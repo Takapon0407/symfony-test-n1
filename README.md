@@ -6,15 +6,15 @@ for demonstorating n1 problem in symfony
 接続情報等検証時は下記の通り。
 https://tektektech.com/wp-admin/post.php?post=3842
 
-
-# 検証
+# N+1の検証について
 
 mysqlの接続が終わり、migrationを終えていれば、下記コマンドでテスト用データが10000ユーザーごとにコメント10件分入る。
+（"--append"をつけることでpurgeされなくなるので、もう一度実行すればさらに追加でデータを入れることができる）
 ```
 php bin/console doctrine:fixtures:load --append
 ```
 
-データを入れたら下記URLにアクセスすると、出力が表示される。
+データをDBへ入れたら下記URLにアクセスすると、出力が表示される。
 （件数が多くなるほど時間がかかるので注意, 目安として30000ユーザーで1000秒近く）
 
 http://127.0.0.1:8000/lucky/number
