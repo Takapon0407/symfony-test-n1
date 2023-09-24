@@ -22,19 +22,19 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    /**
-    * @return Comment[] Returns an array of Comment objects
-    */
     public function findByUserId($userId): array
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.user_id = :user_id')
-            ->setParameter('user_id', $userId)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT * FROM comment c
+            WHERE c.user_id = :user_id
+            ORDER BY c.id ASC
+        ';
+        
+        $stmt = $conn->executeQuery($sql, ['user_id' => $userId]);
+
+        return $stmt->fetchAllAssociative();
     }
 
     /**
@@ -44,15 +44,15 @@ class CommentRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $userIdsString = implode(',', $userIds);
+        $placeholders = implode(',', array_fill(0, count($userIds), '?'));
 
         $sql = "
             SELECT * FROM user
             JOIN comment ON user.id = comment.user_id
-            WHERE user.id IN ($userIdsString)
+            WHERE user.id IN ($placeholders)
         ";
-        
-        $stmt = $conn->executeQuery($sql);
+
+        $stmt = $conn->executeQuery($sql, $userIds);
         
         $results = [];
         while ($row = $stmt->fetchAssociative()) {
@@ -60,6 +60,5 @@ class CommentRepository extends ServiceEntityRepository
         }
         
         return $results;
-        
     }
 }
