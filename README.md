@@ -1,10 +1,27 @@
 # symfony-test-n1
 for demonstorating n1 problem in symfony
 
+# 初回
+```
+$ pwd
+../symfony-test-n1
+
+$ composer install
+
+$ symfony server:start
+
+```
+以下へアクセス。
+http://127.0.0.1:8000/lucky/number
 
 # mysqlはlocalで用意が必要
 接続情報等検証時は下記の通り。
 https://tektektech.com/wp-admin/post.php?post=3842
+
+接続情報は.envにあるとおりを想定。
+```
+DATABASE_URL="mysql://newuser:password@127.0.0.1:3306/symfony_test?serverVersion=8.0.33&charset=utf8mb4"
+``
 
 # N+1の検証について
 
