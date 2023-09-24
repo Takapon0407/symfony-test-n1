@@ -16,7 +16,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -36,18 +35,4 @@ class UserRepository extends ServiceEntityRepository
 
         return $ids;
     }
-
-    // public function findAllWithComments(): array
-    // {
-    //     $entityManager = $this->getEntityManager();
-
-    //     $query = $entityManager->createQuery(
-    //         'SELECT u, c
-    //         FROM App\Entity\User u
-    //         JOIN u.comments c'
-    //     );
-
-    //     // Returns an array of User objects with related Comment objects
-    //     return $query->getResult();
-    // }
 }
