@@ -20,19 +20,21 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
-
+    
     public function findAllIds(): array
     {
-        $entityManager = $this->getEntityManager();
-
-        $query = $entityManager->createQuery(
-            'SELECT u.id
-            FROM App\Entity\User u'
-        );
-
-        $results = $query->getArrayResult();
-        $ids = array_column($results, 'id');
-
+        $conn = $this->getEntityManager()->getConnection();
+    
+        $sql = "SELECT id FROM user";
+        
+        $stmt = $conn->executeQuery($sql);
+        
+        $ids = [];
+        while ($row = $stmt->fetchAssociative()) {
+            $ids[] = $row['id'];
+        }
+    
         return $ids;
     }
+    
 }
